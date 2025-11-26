@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Seed Test Data</title>
+</head>
+<body>
+  <h1>Seeding Test Data...</h1>
+  <div id="status"></div>
+  <script>
+    const scenarioId = 90001;
+    const status = document.getElementById('status');
+    
+    const budgetData = [
+      // Personnel - Q1
+      { accountName: "Executive Salaries", category: "Personnel", period: "2025-01-01", amount: 250000 },
+      { accountName: "Engineering Salaries", category: "Personnel", period: "2025-01-01", amount: 450000 },
+      { accountName: "Sales Salaries", category: "Personnel", period: "2025-01-01", amount: 180000 },
+      { accountName: "Marketing Salaries", category: "Personnel", period: "2025-01-01", amount: 120000 },
+      { accountName: "Employee Benefits", category: "Personnel", period: "2025-01-01", amount: 150000 },
+      { accountName: "Payroll Taxes", category: "Personnel", period: "2025-01-01", amount: 95000 },
+      
+      // Personnel - Q2
+      { accountName: "Executive Salaries", category: "Personnel", period: "2025-04-01", amount: 250000 },
+      { accountName: "Engineering Salaries", category: "Personnel", period: "2025-04-01", amount: 480000 },
+      { accountName: "Sales Salaries", category: "Personnel", period: "2025-04-01", amount: 200000 },
+      { accountName: "Marketing Salaries", category: "Personnel", period: "2025-04-01", amount: 130000 },
+      { accountName: "Employee Benefits", category: "Personnel", period: "2025-04-01", amount: 160000 },
+      { accountName: "Payroll Taxes", category: "Personnel", period: "2025-04-01", amount: 102000 },
+      
+      // Operations - Q1
+      { accountName: "Office Rent", category: "Operations", period: "2025-01-01", amount: 45000 },
+      { accountName: "Utilities", category: "Operations", period: "2025-01-01", amount: 8000 },
+      { accountName: "Office Supplies", category: "Operations", period: "2025-01-01", amount: 5000 },
+      { accountName: "Equipment Lease", category: "Operations", period: "2025-01-01", amount: 12000 },
+      { accountName: "Insurance", category: "Operations", period: "2025-01-01", amount: 15000 },
+      
+      // Operations - Q2
+      { accountName: "Office Rent", category: "Operations", period: "2025-04-01", amount: 45000 },
+      { accountName: "Utilities", category: "Operations", period: "2025-04-01", amount: 9000 },
+      { accountName: "Office Supplies", category: "Operations", period: "2025-04-01", amount: 6000 },
+      { accountName: "Equipment Lease", category: "Operations", period: "2025-04-01", amount: 12000 },
+      
+      // Marketing - Q1
+      { accountName: "Digital Advertising", category: "Marketing", period: "2025-01-01", amount: 75000 },
+      { accountName: "Content Marketing", category: "Marketing", period: "2025-01-01", amount: 25000 },
+      { accountName: "Events & Conferences", category: "Marketing", period: "2025-01-01", amount: 40000 },
+      { accountName: "Marketing Tools & Software", category: "Marketing", period: "2025-01-01", amount: 15000 },
+      
+      // Marketing - Q2
+      { accountName: "Digital Advertising", category: "Marketing", period: "2025-04-01", amount: 85000 },
+      { accountName: "Content Marketing", category: "Marketing", period: "2025-04-01", amount: 30000 },
+      { accountName: "Events & Conferences", category: "Marketing", period: "2025-04-01", amount: 50000 },
+      { accountName: "Marketing Tools & Software", category: "Marketing", period: "2025-04-01", amount: 15000 },
+      
+      // IT & Technology - Q1
+      { accountName: "Cloud Infrastructure (AWS/Azure)", category: "IT", period: "2025-01-01", amount: 35000 },
+      { accountName: "Software Licenses", category: "IT", period: "2025-01-01", amount: 20000 },
+      { accountName: "IT Support & Maintenance", category: "IT", period: "2025-01-01", amount: 12000 },
+      { accountName: "Cybersecurity", category: "IT", period: "2025-01-01", amount: 18000 },
+      
+      // IT & Technology - Q2
+      { accountName: "Cloud Infrastructure (AWS/Azure)", category: "IT", period: "2025-04-01", amount: 40000 },
+      { accountName: "Software Licenses", category: "IT", period: "2025-04-01", amount: 22000 },
+      { accountName: "IT Support & Maintenance", category: "IT", period: "2025-04-01", amount: 12000 },
+      { accountName: "Cybersecurity", category: "IT", period: "2025-04-01", amount: 18000 },
+    ];
+    
+    async function seedData() {
+      status.innerHTML = 'Starting to seed data...<br>';
+      
+      for (let i = 0; i < budgetData.length; i++) {
+        const item = budgetData[i];
+        try {
+          const response = await fetch('/api/trpc/budget.createLineItem', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              scenarioId,
+              accountName: item.accountName,
+              category: item.category,
+              period: new Date(item.period),
+              amount: item.amount,
+            }),
+          });
+          
+          if (response.ok) {
+            status.innerHTML += `✅ Created: ${item.accountName} - $${item.amount.toLocaleString()}<br>`;
+          } else {
+            status.innerHTML += `❌ Failed: ${item.accountName}<br>`;
+          }
+        } catch (error) {
+          status.innerHTML += `❌ Error: ${item.accountName} - ${error.message}<br>`;
+        }
+        
+        // Small delay to avoid overwhelming the server
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      status.innerHTML += `<br><strong>✅ Seeding complete! Created ${budgetData.length} line items.</strong>`;
+    }
+    
+    seedData();
+  </script>
+</body>
+</html>

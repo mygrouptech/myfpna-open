@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1763850767094,
+      "tag": "0000_foamy_banshee",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1763850894526,
+      "tag": "0001_fat_thunderbolts",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1763855949850,
+      "tag": "0002_tense_ulik",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1763864023789,
+      "tag": "0003_cultured_landau",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1763880097713,
+      "tag": "0004_reflective_thor",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1763881064609,
+      "tag": "0005_hard_sentinels",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1764129757487,
+      "tag": "0006_aspiring_white_tiger",
+      "breakpoints": true
+    }
+  ]
+}

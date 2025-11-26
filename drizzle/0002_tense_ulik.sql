@@ -1,0 +1,2 @@
+ALTER TABLE `organizations` MODIFY COLUMN `subscription_tier` enum('free','pro','enterprise') DEFAULT 'free';--> statement-breakpoint
+ALTER TABLE `organizations` ADD `stripe_subscription_id` varchar(255);
