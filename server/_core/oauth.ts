@@ -98,7 +98,7 @@ export function registerOAuthRoutes(app: Express) {
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
-      res.redirect(302, "/");
+      res.redirect(302, "/dashboard");
     } catch (error) {
       console.error("[OAuth] Callback failed:", error);
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
