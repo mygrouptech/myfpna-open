@@ -8,6 +8,7 @@ import { useState } from "react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import AIVarianceInsights from "@/components/AIVarianceInsights";
+import { ExportButton } from "@/components/ExportButton";
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
@@ -90,22 +91,32 @@ export default function Analytics() {
             </p>
           </div>
 
-          <div className="w-64">
-            <Select
-              value={selectedScenarioId?.toString() || ""}
-              onValueChange={(v) => setSelectedScenarioId(parseInt(v))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select scenario" />
-              </SelectTrigger>
-              <SelectContent>
-                {scenarios?.map((scenario) => (
-                  <SelectItem key={scenario.id} value={scenario.id.toString()}>
-                    {scenario.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex items-center gap-3">
+            <div className="w-64">
+              <Select
+                value={selectedScenarioId?.toString() || ""}
+                onValueChange={(v) => setSelectedScenarioId(parseInt(v))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select scenario" />
+                </SelectTrigger>
+                <SelectContent>
+                  {scenarios?.map((scenario) => (
+                    <SelectItem key={scenario.id} value={scenario.id.toString()}>
+                      {scenario.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {selectedScenarioId && (
+              <ExportButton 
+                type="actuals" 
+                startDate={lineItems?.[0]?.period}
+                endDate={lineItems?.[lineItems.length - 1]?.period}
+              />
+            )}
           </div>
         </div>
 

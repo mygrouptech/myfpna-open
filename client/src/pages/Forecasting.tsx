@@ -10,6 +10,7 @@ import { formatCurrency, formatDate } from "@/const";
 import { useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Sparkles, TrendingUp, AlertCircle, Loader2 } from "lucide-react";
+import { ExportButton } from "@/components/ExportButton";
 import { toast } from "sonner";
 
 export default function Forecasting() {
@@ -147,11 +148,11 @@ export default function Forecasting() {
                 />
               </div>
 
-              <div className="flex items-end">
+              <div className="flex items-end gap-2">
                 <Button 
                   onClick={handleGenerate} 
                   disabled={!selectedScenarioId || isGenerating}
-                  className="w-full"
+                  className="flex-1"
                 >
                   {isGenerating ? (
                     <>
@@ -165,6 +166,13 @@ export default function Forecasting() {
                     </>
                   )}
                 </Button>
+                
+                {selectedScenarioId && forecasts && forecasts.length > 0 && (
+                  <ExportButton 
+                    type="forecasts" 
+                    scenarioId={selectedScenarioId}
+                  />
+                )}
               </div>
             </div>
           </CardContent>
