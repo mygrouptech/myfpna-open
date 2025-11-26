@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { trpc } from "@/lib/trpc";
 import { SCENARIO_STATUS_LABELS, SCENARIO_TYPE_LABELS, formatDate } from "@/const";
 import { Plus, FileText, CheckCircle, Archive } from "lucide-react";
+import { ExportButton } from "@/components/ExportButton";
 import { useState } from "react";
 import { Link } from "wouter";
 import { toast } from "sonner";
@@ -186,6 +187,11 @@ export default function Scenarios() {
                         Open
                       </Link>
                     </Button>
+                    <ExportButton 
+                      type="budgets" 
+                      scenarioId={scenario.id}
+                      size="sm"
+                    />
                   </div>
                 </CardContent>
               </Card>
