@@ -7,6 +7,7 @@ import { formatCurrency, formatPercent } from "@/const";
 import { useState } from "react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import AIVarianceInsights from "@/components/AIVarianceInsights";
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
@@ -218,6 +219,9 @@ export default function Analytics() {
                 )}
               </CardContent>
             </Card>
+
+            {/* AI Variance Insights */}
+            <AIVarianceInsights scenarioId={selectedScenarioId} />
 
             {/* Category Breakdown */}
             <Card>

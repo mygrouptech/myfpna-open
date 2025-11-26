@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/lib/trpc";
 import { ROLE_LABELS } from "@/const";
 import { useState, useEffect } from "react";
-import { Settings as SettingsIcon, Building2, Users, Bell, Shield } from "lucide-react";
+import { Settings as SettingsIcon, Building2, Users, Bell, Shield, Database } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Settings() {
@@ -66,7 +66,7 @@ export default function Settings() {
         </div>
 
         <Tabs defaultValue="organization" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="organization">
               <Building2 className="h-4 w-4 mr-2" />
               Organization
@@ -82,6 +82,10 @@ export default function Settings() {
             <TabsTrigger value="notifications">
               <Bell className="h-4 w-4 mr-2" />
               Notifications
+            </TabsTrigger>
+            <TabsTrigger value="demo-data">
+              <Database className="h-4 w-4 mr-2" />
+              Demo Data
             </TabsTrigger>
           </TabsList>
 
@@ -317,8 +321,111 @@ export default function Settings() {
               </CardContent>
             </Card>
           </TabsContent>
+
+          <TabsContent value="demo-data" className="space-y-4">
+            <DemoDataTab />
+          </TabsContent>
         </Tabs>
       </div>
     </DashboardLayout>
+  );
+}
+
+function DemoDataTab() {
+  const utils = trpc.useUtils();
+  
+  const generateMutation = trpc.demoData.generate.useMutation({
+    onSuccess: (data) => {
+      utils.scenario.list.invalidate();
+      toast.success(`Demo data generated successfully! Created scenario: ${data.scenarioName}`);
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to generate demo data");
+    },
+  });
+
+  const clearMutation = trpc.demoData.clear.useMutation({
+    onSuccess: () => {
+      utils.scenario.list.invalidate();
+      toast.success("Demo data cleared successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to clear demo data");
+    },
+  });
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Demo Data Generator</CardTitle>
+        <CardDescription>
+          Generate realistic financial scenarios for testing and demonstration purposes
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="rounded-lg border bg-blue-50 border-blue-200 p-4">
+          <div className="flex gap-3">
+            <Database className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <div className="font-medium text-blue-900">What is Demo Data?</div>
+              <div className="text-sm text-blue-700">
+                Demo data includes realistic financial scenarios based on industry benchmarks from companies like:
+              </div>
+              <ul className="text-sm text-blue-700 list-disc list-inside ml-2 mt-2 space-y-1">
+                <li><strong>TechCorp Solutions</strong> - Technology SaaS ($50M revenue, 30% growth)</li>
+                <li><strong>RetailMart Inc</strong> - Retail ($500M revenue, 5% growth)</li>
+                <li><strong>ManuFab Industries</strong> - Manufacturing ($200M revenue, 8% growth)</li>
+                <li><strong>HealthPlus Services</strong> - Healthcare ($150M revenue, 12% growth)</li>
+                <li><strong>FinServe Group</strong> - Financial Services ($80M revenue, 15% growth)</li>
+              </ul>
+              <div className="text-sm text-blue-700 mt-3">
+                Each scenario includes 12 months of budget data, actual results with realistic variances, and AI-powered forecasts for the next year.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between p-4 border rounded-lg">
+          <div>
+            <div className="font-medium">Generate Demo Data</div>
+            <div className="text-sm text-muted-foreground">
+              Create a complete financial scenario with budget, actuals, and forecasts
+            </div>
+          </div>
+          <Button 
+            onClick={() => generateMutation.mutate()}
+            disabled={generateMutation.isPending}
+          >
+            {generateMutation.isPending ? "Generating..." : "Generate"}
+          </Button>
+        </div>
+
+        <div className="flex items-center justify-between p-4 border rounded-lg border-orange-200 bg-orange-50">
+          <div>
+            <div className="font-medium text-orange-900">Clear All Demo Data</div>
+            <div className="text-sm text-orange-700">
+              Remove all scenarios, budgets, actuals, and forecasts from your organization
+            </div>
+          </div>
+          <Button 
+            variant="destructive"
+            onClick={() => {
+              if (confirm('Are you sure you want to delete all data? This action cannot be undone.')) {
+                clearMutation.mutate();
+              }
+            }}
+            disabled={clearMutation.isPending}
+          >
+            {clearMutation.isPending ? "Clearing..." : "Clear All"}
+          </Button>
+        </div>
+
+        <div className="rounded-lg border bg-muted p-4">
+          <div className="text-sm text-muted-foreground">
+            <strong>Note:</strong> Demo data is generated based on your organization ID and cycles through different industry profiles. Each time you generate demo data, you'll get a different company profile with realistic financial metrics.
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
