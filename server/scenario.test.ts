@@ -5,12 +5,19 @@ import type { TrpcContext } from "./_core/context";
 type AuthenticatedUser = NonNullable<TrpcContext["user"]>;
 
 function createTestContext(role: "admin" | "manager" | "analyst" | "viewer" = "manager"): TrpcContext {
+  const openIdMap = {
+    admin: "test-admin",
+    manager: "test-manager",
+    analyst: "test-analyst",
+    viewer: "test-viewer",
+  };
+  
   const user: AuthenticatedUser = {
-    id: 1,
-    openId: "test-user",
+    id: role === "admin" ? 1 : role === "manager" ? 2 : 3,
+    openId: openIdMap[role],
     organizationId: 1,
-    email: "test@example.com",
-    name: "Test User",
+    email: `${role}@test.com`,
+    name: `${role.charAt(0).toUpperCase() + role.slice(1)} User`,
     loginMethod: "manus",
     role,
     isActive: true,

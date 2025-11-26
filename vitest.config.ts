@@ -15,5 +15,12 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["server/**/*.test.ts", "server/**/*.spec.ts"],
+    // Global setup/teardown for MySQL container
+    globalSetup: ["./server/test-setup.global.ts"],
+    // Per-test setup for clean database
+    setupFiles: ["./server/test-setup.each.ts"],
+    // Increase timeout for container startup
+    testTimeout: 30000,
+    hookTimeout: 60000,
   },
 });

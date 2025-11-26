@@ -13,9 +13,25 @@ import {
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
+let _testDb: ReturnType<typeof drizzle> | null = null;
+
+// Set test database (used by tests)
+export function setTestDb(db: any) {
+  _testDb = db;
+}
+
+// Clear test database
+export function clearTestDb() {
+  _testDb = null;
+}
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
+  // Use test database if set
+  if (_testDb) {
+    return _testDb;
+  }
+  
   if (!_db && process.env.DATABASE_URL) {
     try {
       _db = drizzle(process.env.DATABASE_URL);
